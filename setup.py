@@ -24,6 +24,10 @@ setup(
     install_requires=[
         'numpy'
     ],
+    extras_require={
+        # only needed to serve an agent over the network (jass.service)
+        'service': ['flask']
+    },
     python_requires='>=3.6'
 )
 

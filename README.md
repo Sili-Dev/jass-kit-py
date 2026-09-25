@@ -96,7 +96,7 @@ in a local arena.
 
 The `Dockerfile` packages that service; every push to `master` publishes it to
 `ghcr.io/sili-dev/jass-kit-py`. `deploy/umbrel` describes running it on an
-Umbrel server with automatic updates.
+Umbrel server with Arcane and automatic updates.
 
 ## Encodings
 

@@ -1,11 +1,7 @@
-# jass-bot on an Umbrel server (or any docker host), see README.md next to this file.
+# jass-bot on an Umbrel server, deployed as a project in Arcane, see README.md next to this file.
 #
-#   docker compose up -d
-#
-# Watchtower checks the registry every 5 minutes and replaces the jass-bot
-# container when a new :latest image has been published by GitHub Actions.
-# It only touches containers carrying the enable label below, so the apps
-# managed by Umbrel itself are left alone.
+# Arcane's auto update replaces the container when GitHub Actions has published
+# a new :latest image.
 
 services:
   jass-bot:
@@ -15,18 +11,5 @@ services:
     ports:
       - "${JASS_BOT_PORT:-8888}:8888"
     labels:
-      - com.centurylinklabs.watchtower.enable=true
-
-  watchtower:
-    # maintained fork of containrrr/watchtower, which no longer works with current docker versions
-    image: nickfedor/watchtower:latest
-    container_name: jass-bot-watchtower
-    restart: unless-stopped
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      # only needed if the package on ghcr.io is private, see README.md
-      # - ${HOME}/.docker/config.json:/config.json:ro
-    environment:
-      WATCHTOWER_LABEL_ENABLE: "true"
-      WATCHTOWER_POLL_INTERVAL: "300"
-      WATCHTOWER_CLEANUP: "true"
+      # explicit, so the bot keeps updating even if updates become opt-in
+      - com.getarcaneapp.arcane.updater=true

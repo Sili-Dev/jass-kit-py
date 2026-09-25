@@ -1,7 +1,7 @@
 # Builds the jass-bot image and publishes it to the GitHub container registry
 # (ghcr.io/<owner>/<repo>) on every push to master, after the tests pass.
-# Watchtower on the server (deploy/umbrel/docker-compose.yml) picks up the new
-# :latest image and restarts the container.
+# Arcane on the Umbrel (deploy/umbrel) picks up the new :latest image and
+# recreates the container.
 
 name: Docker image
 

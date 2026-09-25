@@ -94,6 +94,10 @@ See `examples/service/player_service.py`. `AgentByNetwork` is the counterpart: a
 agent that forwards the decisions to such a service, so a remote agent can play
 in a local arena.
 
+The `Dockerfile` packages that service; every push to `master` publishes it to
+`ghcr.io/sili-dev/jass-kit-py`. `deploy/umbrel` describes running it on an
+Umbrel server with automatic updates.
+
 ## Encodings
 
 Getting these wrong is the most common source of confusion.

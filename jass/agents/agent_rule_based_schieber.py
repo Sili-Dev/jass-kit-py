@@ -13,6 +13,7 @@ import logging
 import numpy as np
 
 from jass.agents.agent import Agent
+from jass.agents.mcts.sampling import known_voids
 from jass.game.const import PUSH, OBE_ABE, UNE_UFE, MAX_TRUMP, card_values, color_of_card, offset_of_card, \
     color_masks, partner_player, card_strings
 from jass.game.game_observation import GameObservation
@@ -116,7 +117,7 @@ class AgentRuleBasedSchieber(Agent):
     def _lead(self, obs: GameObservation, valid: np.ndarray) -> int:
         trump = obs.trump
         unseen = self._unseen_cards(obs)
-        voids = self._voids(obs)
+        voids = known_voids(obs)
         opponents = [p for p in range(4) if p != obs.player and p != partner_player[obs.player]]
 
         if trump < 4:
@@ -152,7 +153,7 @@ class AgentRuleBasedSchieber(Agent):
         lead_color = color_of_card[trick[0]]
         is_last = obs.nr_cards_in_trick == 3
         unseen = self._unseen_cards(obs)
-        voids = self._voids(obs)
+        voids = known_voids(obs)
 
         strengths = [card_strength(c, lead_color, trump) for c in trick]
         winning_index = int(np.argmax(strengths))
@@ -204,28 +205,6 @@ class AgentRuleBasedSchieber(Agent):
         played = obs.tricks[obs.tricks >= 0]
         unseen[played] = 0
         return unseen
-
-    @staticmethod
-    def _voids(obs: GameObservation) -> np.ndarray:
-        """
-        Colors that players are known not to have anymore, as boolean array [player, color]. A player that does
-        not follow the lead color has none left, except that trump may always be played (and in the case of a
-        trump lead, the jack of trump may be kept).
-        """
-        voids = np.zeros((4, 4), dtype=bool)
-        for i in range(obs.nr_tricks + 1):
-            first_player = obs.trick_first_player[i]
-            trick = obs.tricks[i]
-            if first_player < 0 or trick[0] < 0:
-                continue
-            lead_color = color_of_card[trick[0]]
-            for j in range(1, 4):
-                if trick[j] < 0:
-                    break
-                color = color_of_card[trick[j]]
-                if color != lead_color and color != obs.trump:
-                    voids[(first_player - j) % 4, lead_color] = True
-        return voids
 
     @staticmethod
     def _is_highest(card: int, lead_color: int, trump: int, unseen: np.ndarray) -> bool:

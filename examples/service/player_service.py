@@ -10,6 +10,7 @@ import logging
 from jass.service.player_service_app import PlayerServiceApp
 from jass.agents.agent_random_schieber import AgentRandomSchieber
 from jass.agents.agent_rule_based_schieber import AgentRuleBasedSchieber
+from jass.agents.mcts.agent_determinization_mcts import AgentDeterminizationMCTS
 
 
 def create_app():
@@ -32,6 +33,7 @@ def create_app():
     # add some players
     app.add_player('random', AgentRandomSchieber())
     app.add_player('rule_based', AgentRuleBasedSchieber())
+    app.add_player('mcts', AgentDeterminizationMCTS())
 
     return app
 

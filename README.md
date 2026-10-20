@@ -52,6 +52,17 @@ its team declared, cashes sure winners, gives points to a partner who wins the
 trick and otherwise wins cheaply or discards its least valuable card. Against
 the random agent it makes about 68% of the points.
 
+`jass.agents.mcts` contains Monte Carlo tree search players that choose trump
+like the rule based agent. `AgentCheatingMCTS` searches the complete game state
+and is a reference point for what perfect information is worth.
+`AgentDeterminizationMCTS` only uses its observation: it repeatedly samples the
+hands of the other players (respecting the colors they are known to be out
+of), searches each sample and plays the card with the most visits over all
+samples. It searches for `time_budget` seconds per card (default 1) and falls
+back to the rule based card if the search fails. The service serves it as
+`mcts`, and `examples/arena/compare_mcts.py` measures it against a reference
+agent on fixed deals, played from both sides.
+
 The two methods return **encoded integers**, described below. Returning an
 invalid card is an error; `get_valid_cards_from_obs` tells you which cards are
 allowed, and using it is the easiest way to be correct.
@@ -135,8 +146,8 @@ counter-clockwise, so `next_player[NORTH]` is west. The `next_player` and
 | Package | Content |
 | --- | --- |
 | `jass.game` | State, observation, rules (`RuleSchieber`), the simulation (`GameSim`), constants and conversion helpers |
-| `jass.agents` | The `Agent` and `AgentCheating` interfaces, random and rule based agents, `AgentByNetwork` |
-| `jass.arena` | Playing many games between agents, with card dealing strategies |
+| `jass.agents` | The `Agent` and `AgentCheating` interfaces, random, rule based and MCTS agents, `AgentByNetwork` |
+| `jass.arena` | Playing many games between agents, with card dealing strategies (random or seeded) |
 | `jass.service` | Flask application to serve agents over REST |
 | `jass.logs` | Reading and writing logged games |
 

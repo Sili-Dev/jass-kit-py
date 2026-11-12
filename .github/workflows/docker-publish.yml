@@ -22,7 +22,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pytest '.[service]'
+        # train is only needed by the tests of jass.train; the image itself installs .[service] only
+        pip install pytest '.[service,train]'
     - name: Test with pytest
       run: pytest
 

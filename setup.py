@@ -28,7 +28,9 @@ setup(
         # only needed to serve an agent over the network (jass.service)
         'service': ['flask'],
         # only needed to train models (jass.train), never in the bot image
-        'train': ['pandas', 'scikit-learn']
+        'train': ['pandas', 'scikit-learn'],
+        # only needed to train the neural trump model (jass.train.trump.train_nn), never in the bot image
+        'train-nn': ['pandas', 'scikit-learn', 'tensorflow', 'matplotlib']
     },
     python_requires='>=3.6'
 )
